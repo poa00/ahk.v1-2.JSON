@@ -1,23 +1,4 @@
 /**
- * Lib: JSON.ahk
- *     JSON lib for AutoHotkey.
- * Version:
- *     v2.1.3 [updated 04/18/2016 (MM/DD/YYYY)]
- * License:
- *     WTFPL [http://wtfpl.net/]
- * Requirements:
- *     Latest version of AutoHotkey (v1.1+ or v2.0-a+)
- * Installation:
- *     Use #Include JSON.ahk or copy into a function library folder and then
- *     use #Include <JSON>
- * Links:
- *     GitHub:     - https://github.com/cocobelgica/AutoHotkey-JSON
- *     Forum Topic - http://goo.gl/r0zI8t
- *     Email:      - cocobelgica <at> gmail <dot> com
- */
-
-
-/**
  * Class: JSON
  *     The JSON object contains methods for parsing JSON and converting values
  *     to JSON. Callable - NO; Instantiable - YES; Subclassable - YES;
@@ -39,7 +20,7 @@ class JSON
 	 *     reviver   [in, opt] - function object, similar to JavaScript's
 	 *                           JSON.parse() 'reviver' parameter
 	 */
-	class Load extends JSON.Functor
+	class parse extends JSON.Functor
 	{
 		Call(self, ByRef text, reviver:="")
 		{
@@ -226,7 +207,7 @@ class JSON
 	 *     space     [in, opt] - similar to JavaScript's JSON.stringify()
 	 *                           'space' parameter
 	 */
-	class Dump extends JSON.Functor
+	class stringify extends JSON.Functor
 	{
 		Call(self, value, replacer:="", space:="")
 		{
