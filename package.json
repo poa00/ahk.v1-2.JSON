@@ -10,9 +10,7 @@
         "type": "git",
         "url": "https://github.com/Chunjee/json.ahk"
     },
-    "dependencies": {
-        "log": "chunjee/json.ahk"
-    },
+    "dependencies": { },
     "author": "uncredited",
     "license": "WTFPL"
 }
