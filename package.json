@@ -1,7 +1,7 @@
 {
     "name": "json.ahk",
     "version": "1.0.0",
-    "description": "An Automation Tool",
+    "description": "JSON for ahk",
     "main": "json.ahk",
     "scripts": {
         "newinstall": "yarn install --modules-folder ./lib"
