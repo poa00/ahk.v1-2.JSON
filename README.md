@@ -1,4 +1,4 @@
-# JSON and Jxon
+# JSON
 
 #### [JSON](http://json.org/) lib for [AutoHotkey](http://ahkscript.org/)
 
