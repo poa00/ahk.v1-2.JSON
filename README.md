@@ -1,18 +1,18 @@
-# JSON
+# JSON.ahk
+
+Works on both AutoHotkey _v1.1_ and _v2.0a_
 
 #### [JSON](http://json.org/) lib for [AutoHotkey](http://ahkscript.org/)
 
 Requirements: Latest version of AutoHotkey _(v1.1+ or v2.0-a+)_
 
-Version: v2.1.1 _(updated 01/30/2016)_
+Version: v2.2.0 _(updated 2019/11/17)_
 
 License: [WTFPL](http://wtfpl.net/)
 
 
 - - -
 
-## JSON.ahk (class)
-Works on both AutoHotkey _v1.1_ and _v2.0a_
 
 ### Installation
 Use `#Include JSON.ahk` or copy into a [function library folder](http://ahkscript.org/docs/Functions.htm#lib) and use `#Include <JSON>`.
@@ -23,9 +23,9 @@ Use `#Include JSON.ahk` or copy into a [function library folder](http://ahkscrip
 Parses a JSON string into an AHK value
 
 #### Syntax:
-
-    value := JSON.parse( text [, reviver ] )
-
+```autohotkey
+value := JSON.parse( text [, reviver ] )
+```
 
 #### Return Value:
 An AutoHotkey value _(object, string, number)_
@@ -40,9 +40,9 @@ An AutoHotkey value _(object, string, number)_
 Converts an AHK value into a JSON string
 
 #### Syntax:
-
-    str := JSON.stringify( value, [, replacer, space ] )
-
+```autohotkey
+str := JSON.stringify( value, [, replacer, space ] )
+```
 
 #### Return Value:
 A JSON formatted string
