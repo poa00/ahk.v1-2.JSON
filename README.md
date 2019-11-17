@@ -19,12 +19,12 @@ Use `#Include JSON.ahk` or copy into a [function library folder](http://ahkscrip
 
 - - -
 
-#### .Load()
+#### .parse()
 Parses a JSON string into an AHK value
 
 #### Syntax:
 
-    value := JSON.Load( text [, reviver ] )
+    value := JSON.parse( text [, reviver ] )
 
 
 #### Return Value:
@@ -36,12 +36,12 @@ An AutoHotkey value _(object, string, number)_
 
 - - -
 
-#### .Dump()
+#### .stringify()
 Converts an AHK value into a JSON string
 
 #### Syntax:
 
-    str := JSON.Dump( value, [, replacer, space ] )
+    str := JSON.stringify( value, [, replacer, space ] )
 
 
 #### Return Value:
