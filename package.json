@@ -1,6 +1,6 @@
 {
     "name": "json.ahk",
-    "version": "1.0.0",
+    "version": "2.2.0",
     "description": "JSON for ahk",
     "main": "json.ahk",
     "scripts": {
