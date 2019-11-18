@@ -1,12 +1,3 @@
-/**
- * Class: JSON
- *     The JSON object contains methods for parsing JSON and converting values
- *     to JSON. Callable - NO; Instantiable - YES; Subclassable - YES;
- *     Nestable(via #Include) - NO.
- * Methods:
- *     Load() - see relevant documentation before method definition header
- *     Dump() - see relevant documentation before method definition header
- */
 class JSON
 {
 	/**
