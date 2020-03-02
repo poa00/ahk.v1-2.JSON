@@ -1,10 +1,10 @@
 class JSON
 {
 	/**
-	 * Method: Load
+	 * Method: parse
 	 *     Parses a JSON string into an AHK value
 	 * Syntax:
-	 *     value := JSON.Load( text [, reviver ] )
+	 *     value := JSON.parse( text [, reviver ] )
 	 * Parameter(s):
 	 *     value      [retval] - parsed value
 	 *     text    [in, ByRef] - JSON formatted string
@@ -186,10 +186,10 @@ class JSON
 	}
 
 	/**
-	 * Method: Dump
+	 * Method: stringify
 	 *     Converts an AHK value into a JSON string
 	 * Syntax:
-	 *     str := JSON.Dump( value [, replacer, space ] )
+	 *     str := JSON.stringify( value [, replacer, space ] )
 	 * Parameter(s):
 	 *     str        [retval] - JSON representation of an AHK value
 	 *     value          [in] - any value(object, string, number)
