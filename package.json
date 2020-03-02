@@ -8,6 +8,12 @@
         "url": "https://github.com/Chunjee/json.ahk"
     },
     "dependencies": { },
-    "author": "uncredited",
+    "author": "Philip Taylor",
+    "contributors": [
+        {
+          "name": "Shawn Brooker",
+          "url": "https://github.com/chunjee"
+        }
+    ],
     "license": "WTFPL"
 }
