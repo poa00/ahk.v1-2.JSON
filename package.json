@@ -1,19 +1,22 @@
 {
-    "name": "json.ahk",
-    "version": "2.2.0",
-    "description": "JSON for ahk",
-    "main": "json.ahk",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Chunjee/json.ahk"
-    },
-    "dependencies": { },
-    "author": "Philip Taylor",
-    "contributors": [
-        {
-          "name": "Shawn Brooker",
-          "url": "https://github.com/chunjee"
-        }
-    ],
-    "license": "WTFPL"
+	"name": "json.ahk",
+	"version": "2.2.0",
+	"description": "JSON for ahk",
+	"main": "json.ahk",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Chunjee/json.ahk"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"unit-testing.ahk": "^0.6.1"
+	},
+	"author": "Philip Taylor",
+	"contributors": [
+		{
+			"name": "Shawn Brooker",
+			"url": "https://github.com/chunjee"
+		}
+	],
+	"license": "MIT"
 }
