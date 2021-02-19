@@ -1,6 +1,6 @@
 {
 	"name": "json.ahk",
-	"version": "2.2.0",
+	"version": "1.0.0",
 	"description": "JSON for ahk",
 	"main": "json.ahk",
 	"repository": {
@@ -11,8 +11,11 @@
 	"devDependencies": {
 		"unit-testing.ahk": "^0.6.1"
 	},
-	"author": "Philip Taylor",
 	"contributors": [
+		{
+			"name": "Philip Taylor",
+			"url": "https://github.com/G33kDude"
+		},
 		{
 			"name": "Shawn Brooker",
 			"url": "https://github.com/chunjee"
