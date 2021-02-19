@@ -310,8 +310,11 @@ class JSON
 
 	class test extends JSON.Functor
 	{
-		call(self, value)
+		call(self, value:="")
 		{
+			if (isObject(value) || value == ""){
+				return false
+			}
 			try {
 				JSON.parse(value)
 			} catch error {
