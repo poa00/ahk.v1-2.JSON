@@ -2,7 +2,6 @@
 # Custom
 ################################################
 header.svg
-logo.svg
 docs/*
 settings.json
 *.exe
