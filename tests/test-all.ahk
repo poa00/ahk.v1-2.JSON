@@ -37,6 +37,8 @@ assert.true(JSON.test("{""name"":""Jon""}"))
 assert.true(JSON.test("{""application"":""none"",""level"":""INFO"",""msg"":""completed"",""process"":""none"",""utc"":""20210219192828""}"))
 assert.label("valid json with depth of 2")
 assert.true(JSON.test("{""application"":""none"",""depth"":[1,2,3],""level"":""INFO"",""msg"":""completed"",""process"":""none"",""utc"":""20210219192828""}"))
+assert.true(JSON.test("{""face"": ""😐""}"))
+assert.true(JSON.test("{""face"": ""\uD83D\uDE10""}"))
 
 
 assert.fullReport()
