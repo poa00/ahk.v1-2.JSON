@@ -16,7 +16,7 @@ Use `#Include json.ahk` or copy into a [function library folder](http://ahkscrip
 
 ## API
 ### .parse()
-Parses a JSON string into an AHK value.
+Parses a JSON string into a value.
 
 #### Syntax:
 ```autohotkey
@@ -33,7 +33,7 @@ value (object, string, number)
 - - -
 
 ### .stringify()
-Converts an AHK value into a JSON string.
+Converts a value into a JSON string.
 
 #### Syntax:
 ```autohotkey
