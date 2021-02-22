@@ -1,8 +1,8 @@
 # JSON.ahk
 
-Works on both AutoHotkey _v1.1_ and _v2.0a_
-
 #### [JSON](http://json.org/) lib for [AutoHotkey](http://ahkscript.org/)
+
+Works on both _v1.1_ and _v2.0a_
 
 Requires the latest version of AutoHotkey _(v1.1+ or v2.0-a+)_
 
@@ -10,7 +10,7 @@ Requires the latest version of AutoHotkey _(v1.1+ or v2.0-a+)_
 
 
 
-### Installation
+## Installation
 Use `#Include json.ahk` or copy into a [function library folder](http://ahkscript.org/docs/Functions.htm#lib) and use `#Include <JSON>`.
 
 
@@ -24,11 +24,11 @@ value := JSON.parse(text [, reviver ])
 ```
 
 #### Return Value:
-An AutoHotkey value _(object, string, number)_
+value (object, string, number)
 
 #### Parameter(s):
  * **text** - JSON formatted string
- * **reviver** [optional] - function object, prescribes how the value originally produced by parsing is transformed, before being returned. Similar to JavaScript's `JSON.parse()` _reviver_ parameter
+ * **reviver** [optional] - function object, prescribes how the value originally produced by parsing is transformed, before being returned. Similar to JavaScript's `JSON.parse()` reviver parameter
 
 - - -
 
@@ -44,9 +44,9 @@ str := JSON.stringify(value, [, replacer, space ])
 A JSON formatted string
 
 #### Parameter(s):
- * **value** - AutoHotkey value _(object, string, number)_
- * **replacer** [optional] - function object, alters the behavior of the stringification process. Similar to JavaScript's `JSON.stringify()` _replacer_ parameter
- * **space** [optional] -if _space_ is a non-negative integer or string, then JSON array elements and object members will be pretty-printed with that indent level. Blank( ``""`` ) _(the default)_ or ``0`` selects the most compact representation. Using a positive integer _space_ indents that many spaces per level, this number is capped at 10 if it's larger than that. If _space_ is a string (such as ``"`t"``), the string _(or the first 10 characters of the string, if it's longer than that)_ is used to indent each level
+ * **value** - (object, string, number)
+ * **replacer** [optional] - function object, alters the behavior of the stringification process. Similar to JavaScript's `JSON.stringify()` replacer parameter
+ * **space** [optional] -if space is a non-negative integer or string, then JSON array elements and object members will be pretty-printed with that indent level. Blank( ``""`` ) (the default) or ``0`` selects the most compact representation. Using a positive integer space indents that many spaces per level, this number is capped at 10 if it's larger than that. If space is a string (such as ``"`t"``), the string (or the first 10 characters of the string, if it's longer than that) is used to indent each level
 
 
 ### .test()
