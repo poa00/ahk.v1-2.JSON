@@ -14,11 +14,11 @@ class JSON
 
 	class parse extends JSON.Functor
 	{
-		call(self, ByRef text, reviver:="")
+		call(self, ByRef param_string, param_reviver:="")
 		{
-			this.rev := isObject(reviver) ? reviver : false
+			this.rev := isObject(param_reviver) ? param_reviver : false
 			; Object keys(and array indices) are temporarily stored in arrays so that
-			; we can enumerate them in the order they appear in the document/text instead
+			; we can enumerate them in the order they appear in the string instead
 			; of alphabetically. Skip if no reviver function is specified.
 			this.keys := this.rev ? {} : false
 
@@ -34,11 +34,11 @@ class JSON
 			next := json_value
 			pos := 0
 
-			while ((ch := subStr(text, ++pos, 1)) != "") {
+			while ((ch := subStr(param_string, ++pos, 1)) != "") {
 				if inStr(" `t`r`n", ch)
 					continue
 				if !inStr(next, ch, 1)
-					this.parseError(next, text, pos)
+					this.parseError(next, param_string, pos)
 
 				holder := stack[1]
 				is_array := holder.IsArray
@@ -46,16 +46,16 @@ class JSON
 				if inStr(",:", ch) {
 					next := (is_key := !is_array && ch == ",") ? quot : json_value
 
-				} else if inStr("}]", ch) {
+				} else if (inStr("}]", ch)) {
 					objRemoveAt(stack, 1)
 					next := stack[1]==root ? "" : stack[1].IsArray ? ",]" : ",}"
 
 				} else {
-					if inStr("{[", ch) {
+					if (inStr("{[", ch)) {
 					; Check if Array() is overridden and if its return value has
 					; the 'IsArray' property. If so, Array() will be called normally,
 					; otherwise, use a custom base object for arrays
-						static json_array := func("Array").isBuiltIn || ![].IsArray ? {IsArray: true} : 0
+					static json_array := func("Array").isBuiltIn || ![].IsArray ? {IsArray: true} : 0
 
 					; sacrifice readability for minor(actually negligible) performance gain
 						(ch == "{")
@@ -68,22 +68,24 @@ class JSON
 
 						ObjInsertAt(stack, 1, value)
 
-						if (this.keys)
+						if (this.keys) {
 							this.keys[value] := []
-
+						}
 					} else {
 						if (ch == quot) {
 							i := pos
-							while (i := inStr(text, quot,, i+1)) {
-								value := strReplace(subStr(text, pos+1, i-pos-1), "\\", "\u005c")
+							while (i := inStr(param_string, quot,, i+1)) {
+								value := strReplace(subStr(param_string, pos+1, i-pos-1), "\\", "\u005c")
 
 								static tail := A_AhkVersion<"2" ? 0 : -1
-								if (subStr(value, tail) != "\")
+								if (subStr(value, tail) != "\") {
 									break
+								}
 							}
 
-							if (!i)
-								this.parseError("'", text, pos)
+							if (!i) {
+								this.parseError("'", param_string, pos)
+							}
 
 							  value := strReplace(value,  "\/",  "/")
 							, value := strReplace(value, bashq, quot)
@@ -97,12 +99,14 @@ class JSON
 
 							i := 0
 							while (i := inStr(value, "\",, i+1)) {
-								if !(subStr(value, i+1, 1) == "u")
-									this.parseError("\", text, pos - strLen(subStr(value, i+1)))
+								if (!(subStr(value, i+1, 1) == "u")) {
+									this.parseError("\", param_string, pos - strLen(subStr(value, i+1)))
+								}
 
 								uffff := Abs("0x" . subStr(value, i+2, 4))
-								if (A_IsUnicode || uffff < 0x100)
+								if (A_IsUnicode || uffff < 0x100) {
 									value := subStr(value, 1, i-1) . chr(uffff) . subStr(value, i+6)
+								}
 							}
 
 							if (is_key) {
@@ -111,7 +115,7 @@ class JSON
 							}
 
 						} else {
-							value := subStr(text, pos, i := regExMatch(text, "[\]\},\s]|$",, pos)-pos)
+							value := subStr(param_string, pos, i := regExMatch(param_string, "[\]\},\s]|$",, pos)-pos)
 
 							static number := "number", integer :="integer"
 							if value is %number%
@@ -119,69 +123,68 @@ class JSON
 								if value is %integer%
 									value += 0
 							}
-							else if (value == "true" || value == "false")
+							else if (value == "true" || value == "false") {
 								value := %value% + 0
-							else if (value == "null")
+							} else if (value == "null") {
 								value := ""
-							else
-							; we can do more here to pinpoint the actual culprit
-							; but that's just too much extra work.
+							} else {
+								; we can do more here to pinpoint the actual culprit
+								; but that's just too much extra work.
 								this.parseError(next, text, pos, i)
-
+							}
 							pos += i-1
 						}
-
 						next := holder==root ? "" : is_array ? ",]" : ",}"
 					} ; If inStr("{[", ch) { ... } else
 
 					is_array? key := objPush(holder, value) : holder[key] := value
 
-					if (this.keys && this.keys.hasKey(holder))
+					if (this.keys && this.keys.hasKey(holder)) {
 						this.keys[holder].Push(key)
+					}
 				}
-
 			} ; while ( ... )
-
 			return this.rev ? this.walk(root, "") : root[""]
 		}
 
-		parseError(expect, ByRef text, pos, len:=1)
+		parseError(param_expect, ByRef param_string, pos, param_length:=1)
 		{
 			static quot := chr(34), qurly := quot . "}"
 
-			line := strSplit(subStr(text, 1, pos), "`n", "`r").length()
-			col := pos - inStr(text, "`n",, -(strLen(text)-pos+1))
+			line := strSplit(subStr(param_string, 1, pos), "`n", "`r").length()
+			col := pos - inStr(param_string, "`n",, -(strLen(param_string)-pos+1))
 			msg := format("{1}`n`nLine:`t{2}`nCol:`t{3}`nChar:`t{4}"
-			,     (expect == "")     ? "Extra data"
-				: (expect == "'")    ? "Unterminated string starting at"
-				: (expect == "\")    ? "Invalid \escape"
-				: (expect == ":")    ? "Expecting ':' delimiter"
-				: (expect == quot)   ? "Expecting object key enclosed in double quotes"
-				: (expect == qurly)  ? "Expecting object key enclosed in double quotes or object closing '}'"
-				: (expect == ",}")   ? "Expecting ',' delimiter or object closing '}'"
-				: (expect == ",]")   ? "Expecting ',' delimiter or array closing ']'"
-				: inStr(expect, "]") ? "Expecting JSON value or array closing ']'"
+			,     (param_expect == "")     ? "Extra data"
+				: (param_expect == "'")    ? "Unterminated string starting at"
+				: (param_expect == "\")    ? "Invalid \escape"
+				: (param_expect == ":")    ? "Expecting ':' delimiter"
+				: (param_expect == quot)   ? "Expecting object key enclosed in double quotes"
+				: (param_expect == qurly)  ? "Expecting object key enclosed in double quotes or object closing '}'"
+				: (param_expect == ",}")   ? "Expecting ',' delimiter or object closing '}'"
+				: (param_expect == ",]")   ? "Expecting ',' delimiter or array closing ']'"
+				: inStr(param_expect, "]") ? "Expecting JSON value or array closing ']'"
 				:                      "Expecting JSON value(string, number, true, false, null, object or array)"
 			, line, col, pos)
 
 			static offset := A_AhkVersion<"2" ? -3 : -4
-			throw Exception(msg, offset, subStr(text, pos, len))
+			throw Exception(msg, offset, subStr(param_string, pos, param_length))
 		}
 
-		walk(holder, key)
+		walk(param_holder, param_key)
 		{
-			value := holder[key]
-			if isObject(value) {
+			value := param_holder[param_key]
+			if (isObject(value)) {
 				for i, k in this.keys[value] {
 					; check if objhasKey(value, k) ??
 					v := this.walk(value, k)
-					if (v != JSON.Undefined)
+					if (v != JSON.Undefined) {
 						value[k] := v
-					else
+					} else {
 						objDelete(value, k)
+					}
 				}
 			}
-			return this.rev.call(holder, key, value)
+			return this.rev.call(param_holder, param_key, value)
 		}
 	}
 
@@ -201,15 +204,15 @@ class JSON
 	*/
 	class stringify extends JSON.Functor
 	{
-		call(self, value, replacer:="", space:="")
+		call(self, param_value, param_replacer:="", space:="")
 		{
-			this.rep := isObject(replacer) ? replacer : ""
+			this.rep := isObject(param_replacer) ? param_replacer : ""
 
 			this.gap := ""
 			if (space) {
 				static integer := "integer"
 				if space is %integer%
-					Loop, % ((n := Abs(space))>10 ? 10 : n)
+					loop, % ((n := Abs(space))>10 ? 10 : n)
 						this.gap .= " "
 				else
 					this.gap := subStr(space, 1, 10)
@@ -217,53 +220,54 @@ class JSON
 				this.indent := "`n"
 			}
 
-			return this.Str({"": value}, "")
+			return this.str({"": param_value}, "")
 		}
 
-		Str(holder, key)
+		str(param_holder, param_key)
 		{
-			value := holder[key]
+			param_value := param_holder[param_key]
 
 			if (this.rep)
-				value := this.rep.call(holder, key, objhasKey(holder, key) ? value : JSON.Undefined)
+				param_value := this.rep.call(param_holder, param_key, objhasKey(param_holder, param_key) ? param_value : JSON.Undefined)
 
-			if isObject(value) {
+			if isObject(param_value) {
 			; Check object type, skip serialization for other object types such as
 			; ComObject, Func, BoundFunc, FileObject, RegExMatchObject, Property, etc.
 				static type := A_AhkVersion<"2" ? "" : func("Type")
-				if (type ? type.call(value) == "Object" : objGetCapacity(value) != "") {
+				if (type ? type.call(param_value) == "Object" : objGetCapacity(param_value) != "") {
 					if (this.gap) {
 						stepback := this.indent
 						this.indent .= this.gap
 					}
 
-					is_array := value.IsArray
+					is_array := param_value.IsArray
 					; Array() is not overridden, rollback to old method of
 					; identifying array-like objects. Due to the use of a for-loop
 					; sparse arrays such as '[1,,3]' are detected as objects({}).
 					if (!is_array) {
-						for i in value
+						for i in param_value {
 							is_array := i == A_Index
-						until !is_array
+						}
+						until (!is_array)
 					}
 
 					str := ""
 					if (is_array) {
-						Loop, % value.length() {
-							if (this.gap)
+						loop, % param_value.length() {
+							if (this.gap) {
 								str .= this.indent
-
-							v := this.Str(value, A_Index)
+							}
+							v := this.str(param_value, A_Index)
 							str .= (v != "") ? v . "," : "null,"
 						}
 					} else {
 						colon := this.gap ? ": " : ":"
-						for k in value {
-							v := this.Str(value, k)
+						for k in param_value {
+							v := this.str(param_value, k)
 							if (v != "") {
-								if (this.gap)
+								if (this.gap) {
 									str .= this.indent
-
+								}
 								str .= this.quote(k) . colon . v . ","
 							}
 						}
@@ -271,52 +275,54 @@ class JSON
 
 					if (str != "") {
 						str := rTrim(str, ",")
-						if (this.gap)
+						if (this.gap) {
 							str .= stepback
+						}
 					}
 
-					if (this.gap)
+					if (this.gap) {
 						this.indent := stepback
-
+					}
 					return is_array ? "[" . str . "]" : "{" . str . "}"
 				}
-
-			} else ; is_number ? value : "value"
-				return objGetCapacity([value], 1)=="" ? value : this.quote(value)
+			} else {
+				; is_number ? param_value : "param_value"
+				return objGetCapacity([param_value], 1)=="" ? param_value : this.quote(param_value)
+			}
 		}
 
-		quote(string)
+		quote(param_string)
 		{
 			static quot := chr(34), bashq := "\" . quot
 
-			if (string != "") {
-				  string := strReplace(string,  "\",  "\\")
-				; , string := strReplace(string,  "/",  "\/") ; optional in ECMAScript
-				, string := strReplace(string, quot, bashq)
-				, string := strReplace(string, "`b",  "\b")
-				, string := strReplace(string, "`f",  "\f")
-				, string := strReplace(string, "`n",  "\n")
-				, string := strReplace(string, "`r",  "\r")
-				, string := strReplace(string, "`t",  "\t")
+			if (param_string != "") {
+				  param_string := strReplace(param_string,  "\",  "\\")
+				; , param_string := strReplace(param_string,  "/",  "\/") ; optional in ECMAScript
+				, param_string := strReplace(param_string, quot, bashq)
+				, param_string := strReplace(param_string, "`b",  "\b")
+				, param_string := strReplace(param_string, "`f",  "\f")
+				, param_string := strReplace(param_string, "`n",  "\n")
+				, param_string := strReplace(param_string, "`r",  "\r")
+				, param_string := strReplace(param_string, "`t",  "\t")
 
 				static rx_escapable := A_AhkVersion<"2" ? "O)[^\x20-\x7e]" : "[^\x20-\x7e]"
-				while regExMatch(string, rx_escapable, m)
-					string := strReplace(string, m.Value, format("\u{1:04x}", ord(m.Value)))
+				while regExMatch(param_string, rx_escapable, m)
+					param_string := strReplace(param_string, m.Value, format("\u{1:04x}", ord(m.Value)))
 			}
 
-			return quot . string . quot
+			return quot . param_string . quot
 		}
 	}
 
 	class test extends JSON.Functor
 	{
-		call(self, string:="")
+		call(self, param_string:="")
 		{
-			if (isObject(string) || string == "") {
+			if (isObject(param_string) || param_string == "") {
 				return false
 			}
 			try {
-				JSON.parse(string)
+				JSON.parse(param_string)
 			} catch error {
 				return false
 			}
@@ -350,15 +356,15 @@ class JSON
 
 	class Functor
 	{
-		__call(method, ByRef arg, args*)
+		__call(param_method, ByRef param_args, param_extargs*)
 		{
 			; When casting to call(), use a new instance of the "function object"
 			; so as to avoid directly storing the properties(used across sub-methods)
 			; into the "function object" itself.
-			if isObject(method)
-				return (new this).call(method, arg, args*)
-			else if (method == "")
-				return (new this).call(arg, args*)
+			if isObject(param_method)
+				return (new this).call(param_method, param_args, param_extargs*)
+			else if (param_method == "")
+				return (new this).call(param_args, param_extargs*)
 		}
 	}
 }

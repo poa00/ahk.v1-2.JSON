@@ -2,9 +2,8 @@
 
 #### [JSON](http://json.org/) lib for [AutoHotkey](http://ahkscript.org/)
 
-Works on both _v1.1_ and _v2.0a_
+Works on both v1 and v2 of AutoHotkey
 
-Requires the latest version of AutoHotkey _(v1.1+ or v2.0-a+)_
 
 -----
 
@@ -15,19 +14,20 @@ Use `#Include json.ahk` or copy into a [function library folder](http://ahkscrip
 
 
 ## API
-### .parse()
+
+## .parse()
 Parses a JSON string into a value.
 
 #### Syntax:
 ```autohotkey
-value := JSON.parse(text [, reviver ])
+value := JSON.parse(string [, reviver ])
 ```
 
 #### Return Value:
 value (object, string, number)
 
 #### Parameter(s):
- * **text** - JSON formatted string
+ * **string** - JSON formatted string
  * **reviver** [optional] - function object, prescribes how the value originally produced by parsing is transformed, before being returned. Similar to JavaScript's `JSON.parse()` reviver parameter
 
 #### Example:
@@ -38,7 +38,7 @@ JSON.parse("[1, 2, 3]")
 
 
 
-### .stringify()
+## .stringify()
 Converts a value into a JSON string.
 
 #### Syntax:
@@ -62,7 +62,7 @@ JSON.stringify([1, 2, 3])
 
 
 
-### .test()
+## .test()
 tests if a string is a valid json string or not.
 
 #### Syntax:
@@ -74,7 +74,7 @@ JSON.test(string)
 `true` if the string is interpreted as valid json, else `false`
 
 #### Parameter(s):
- * **value** - the string value to be tested for validity
+ * **string** - the string value to be tested for validity
 
 #### Example:
 ```autohotkey
