@@ -35,10 +35,12 @@ class JSON
 			pos := 0
 
 			while ((ch := subStr(param_string, ++pos, 1)) != "") {
-				if inStr(" `t`r`n", ch)
+				if inStr(" `t`r`n", ch) {
 					continue
-				if !inStr(next, ch, 1)
+				}
+				if !inStr(next, ch, 1) {
 					this.parseError(next, param_string, pos)
+				}
 
 				holder := stack[1]
 				is_array := holder.IsArray
@@ -154,7 +156,7 @@ class JSON
 			line := strSplit(subStr(param_string, 1, pos), "`n", "`r").length()
 			col := pos - inStr(param_string, "`n",, -(strLen(param_string)-pos+1))
 			msg := format("{1}`n`nLine:`t{2}`nCol:`t{3}`nChar:`t{4}"
-			,     (param_expect == "")     ? "Extra data"
+				, (param_expect == "")     ? "Extra data"
 				: (param_expect == "'")    ? "Unterminated string starting at"
 				: (param_expect == "\")    ? "Invalid \escape"
 				: (param_expect == ":")    ? "Expecting ':' delimiter"
@@ -212,14 +214,15 @@ class JSON
 			if (space) {
 				static integer := "integer"
 				if space is %integer%
-					loop, % ((n := Abs(space))>10 ? 10 : n)
+				{
+					loop, % ((n := Abs(space))>10 ? 10 : n) {
 						this.gap .= " "
-				else
+					}
+				} else {
 					this.gap := subStr(space, 1, 10)
-
+				}
 				this.indent := "`n"
 			}
-
 			return this.str({"": param_value}, "")
 		}
 
@@ -227,8 +230,9 @@ class JSON
 		{
 			param_value := param_holder[param_key]
 
-			if (this.rep)
+			if (this.rep) {
 				param_value := this.rep.call(param_holder, param_key, objhasKey(param_holder, param_key) ? param_value : JSON.Undefined)
+			}
 
 			if isObject(param_value) {
 			; Check object type, skip serialization for other object types such as
@@ -296,7 +300,7 @@ class JSON
 			static quot := chr(34), bashq := "\" . quot
 
 			if (param_string != "") {
-				  param_string := strReplace(param_string,  "\",  "\\")
+				param_string := strReplace(param_string,  "\",  "\\")
 				; , param_string := strReplace(param_string,  "/",  "\/") ; optional in ECMAScript
 				, param_string := strReplace(param_string, quot, bashq)
 				, param_string := strReplace(param_string, "`b",  "\b")
@@ -306,8 +310,9 @@ class JSON
 				, param_string := strReplace(param_string, "`t",  "\t")
 
 				static rx_escapable := A_AhkVersion<"2" ? "O)[^\x20-\x7e]" : "[^\x20-\x7e]"
-				while regExMatch(param_string, rx_escapable, m)
+				while regExMatch(param_string, rx_escapable, m) {
 					param_string := strReplace(param_string, m.Value, format("\u{1:04x}", ord(m.Value)))
+				}
 			}
 
 			return quot . param_string . quot
@@ -321,6 +326,7 @@ class JSON
 			if (isObject(param_string) || param_string == "") {
 				return false
 			}
+
 			try {
 				JSON.parse(param_string)
 			} catch error {
