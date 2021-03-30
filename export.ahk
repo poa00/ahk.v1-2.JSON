@@ -169,7 +169,7 @@ class JSON
 				:								"Expecting JSON value(string, number, true, false, null, object or array)"
 			, line, col, pos)
 
-			static offset := A_AhkVersion<"2" ? -3 : -4
+			static offset := A_AhkVersion < "2" ? -3 : -4
 			throw Exception(msg, offset, subStr(param_string, pos, param_length))
 		}
 
@@ -213,8 +213,7 @@ class JSON
 
 			this.gap := ""
 			if (space) {
-				static integer := "integer"
-				if space is %integer%
+				if space is integer
 				{
 					loop, % ((n := Abs(space))>10 ? 10 : n) {
 						this.gap .= " "
@@ -292,7 +291,7 @@ class JSON
 				}
 			} else {
 				; is_number ? param_value : "param_value"
-				return objGetCapacity([param_value], 1)=="" ? param_value : this.quote(param_value)
+				return objGetCapacity([param_value], 1) == "" ? param_value : this.quote(param_value)
 			}
 		}
 
