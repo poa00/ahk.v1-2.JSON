@@ -89,13 +89,13 @@ class JSON
 								this.parseError("'", param_string, pos)
 							}
 
-							  value := strReplace(value,  "\/",  "/")
+							value := strReplace(value, "\/",  "/")
 							, value := strReplace(value, bashq, quot)
-							, value := strReplace(value,  "\b", "`b")
-							, value := strReplace(value,  "\f", "`f")
-							, value := strReplace(value,  "\n", "`n")
-							, value := strReplace(value,  "\r", "`r")
-							, value := strReplace(value,  "\t", "`t")
+							, value := strReplace(value, "\b", "`b")
+							, value := strReplace(value, "\f", "`f")
+							, value := strReplace(value, "\n", "`n")
+							, value := strReplace(value, "\r", "`r")
+							, value := strReplace(value, "\t", "`t")
 
 							pos := i ; update pos
 
@@ -119,11 +119,12 @@ class JSON
 						} else {
 							value := subStr(param_string, pos, i := regExMatch(param_string, "[\]\},\s]|$",, pos)-pos)
 
-							static number := "number", integer :="integer"
-							if value is %number%
+							if value is number
 							{
-								if value is %integer%
+								if value is integer
+								{
 									value += 0
+								}
 							}
 							else if (value == "true" || value == "false") {
 								value := %value% + 0
@@ -134,9 +135,9 @@ class JSON
 								; but that's just too much extra work.
 								this.parseError(next, text, pos, i)
 							}
-							pos += i-1
+							pos += i - 1
 						}
-						next := holder==root ? "" : is_array ? ",]" : ",}"
+						next := holder == root ? "" : is_array ? ",]" : ",}"
 					} ; If inStr("{[", ch) { ... } else
 
 					is_array? key := objPush(holder, value) : holder[key] := value
@@ -156,16 +157,16 @@ class JSON
 			line := strSplit(subStr(param_string, 1, pos), "`n", "`r").length()
 			col := pos - inStr(param_string, "`n",, -(strLen(param_string)-pos+1))
 			msg := format("{1}`n`nLine:`t{2}`nCol:`t{3}`nChar:`t{4}"
-				, (param_expect == "")     ? "Extra data"
-				: (param_expect == "'")    ? "Unterminated string starting at"
-				: (param_expect == "\")    ? "Invalid \escape"
-				: (param_expect == ":")    ? "Expecting ':' delimiter"
-				: (param_expect == quot)   ? "Expecting object key enclosed in double quotes"
-				: (param_expect == qurly)  ? "Expecting object key enclosed in double quotes or object closing '}'"
-				: (param_expect == ",}")   ? "Expecting ',' delimiter or object closing '}'"
-				: (param_expect == ",]")   ? "Expecting ',' delimiter or array closing ']'"
-				: inStr(param_expect, "]") ? "Expecting JSON value or array closing ']'"
-				:                      "Expecting JSON value(string, number, true, false, null, object or array)"
+				, (param_expect == "")     ?	"Extra data"
+				: (param_expect == "'")    ?	"Unterminated string starting at"
+				: (param_expect == "\")    ?	"Invalid \escape"
+				: (param_expect == ":")    ?	"Expecting ':' delimiter"
+				: (param_expect == quot)   ?	"Expecting object key enclosed in double quotes"
+				: (param_expect == qurly)  ?	"Expecting object key enclosed in double quotes or object closing '}'"
+				: (param_expect == ",}")   ?	"Expecting ',' delimiter or object closing '}'"
+				: (param_expect == ",]")   ?	"Expecting ',' delimiter or array closing ']'"
+				: inStr(param_expect, "]") ?	"Expecting JSON value or array closing ']'"
+				:								"Expecting JSON value(string, number, true, false, null, object or array)"
 			, line, col, pos)
 
 			static offset := A_AhkVersion<"2" ? -3 : -4
@@ -300,21 +301,20 @@ class JSON
 			static quot := chr(34), bashq := "\" . quot
 
 			if (param_string != "") {
-				param_string := strReplace(param_string,  "\",  "\\")
+				param_string := strReplace(param_string,  "\", "\\")
 				; , param_string := strReplace(param_string,  "/",  "\/") ; optional in ECMAScript
 				, param_string := strReplace(param_string, quot, bashq)
-				, param_string := strReplace(param_string, "`b",  "\b")
-				, param_string := strReplace(param_string, "`f",  "\f")
-				, param_string := strReplace(param_string, "`n",  "\n")
-				, param_string := strReplace(param_string, "`r",  "\r")
-				, param_string := strReplace(param_string, "`t",  "\t")
+				, param_string := strReplace(param_string, "`b", "\b")
+				, param_string := strReplace(param_string, "`f", "\f")
+				, param_string := strReplace(param_string, "`n", "\n")
+				, param_string := strReplace(param_string, "`r", "\r")
+				, param_string := strReplace(param_string, "`t", "\t")
 
 				static rx_escapable := A_AhkVersion<"2" ? "O)[^\x20-\x7e]" : "[^\x20-\x7e]"
 				while regExMatch(param_string, rx_escapable, m) {
 					param_string := strReplace(param_string, m.Value, format("\u{1:04x}", ord(m.Value)))
 				}
 			}
-
 			return quot . param_string . quot
 		}
 	}
