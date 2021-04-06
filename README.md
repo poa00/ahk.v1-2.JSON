@@ -10,10 +10,10 @@ Works on both v1 and v2 of AutoHotkey
 
 
 ## Installation
-Use `#Include json.ahk` or copy into a [function library folder](http://ahkscript.org/docs/Functions.htm#lib) and use `#Include <JSON>`.
+Use `#Include export.ahk` or copy into a [function library folder](http://ahkscript.org/docs/Functions.htm#lib) and use `#Include <JSON>`.
 
 
-## API
+# API
 
 ## .parse()
 Parses a JSON string into a value.
