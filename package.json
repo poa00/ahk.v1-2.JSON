@@ -2,7 +2,7 @@
 	"name": "json.ahk",
 	"version": "0.1.0",
 	"description": "JSON for ahk",
-	"main": "json.ahk",
+	"main": "export.ahk",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Chunjee/json.ahk"
