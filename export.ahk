@@ -1,6 +1,6 @@
 class JSON
 {
-	class parse extends JSON.Functor
+	class parse extends JSON.functor
 	{
 		call(self, ByRef param_string, param_reviver:="")
 		{
@@ -180,7 +180,7 @@ class JSON
 	}
 
 
-	class stringify extends JSON.Functor
+	class stringify extends JSON.functor
 	{
 		call(self, param_value, param_replacer:="", space:="")
 		{
@@ -293,7 +293,7 @@ class JSON
 		}
 	}
 
-	class test extends JSON.Functor
+	class test extends JSON.functor
 	{
 		call(self, param_string:="")
 		{
@@ -327,17 +327,18 @@ class JSON
 		}
 	}
 
-	class Functor
+	class functor
 	{
 		__call(param_method, ByRef param_args, param_extargs*)
 		{
 			; When casting to call(), use a new instance of the "function object"
 			; so as to avoid directly storing the properties(used across sub-methods)
 			; into the "function object" itself.
-			if isObject(param_method)
+			if isObject(param_method) {
 				return (new this).call(param_method, param_args, param_extargs*)
-			else if (param_method == "")
+			} else if (param_method == "") {
 				return (new this).call(param_args, param_extargs*)
+			}
 		}
 	}
 }
