@@ -1,17 +1,5 @@
 class JSON
 {
-	/**
-	* Method: parse
-	*     Parses a JSON string into an AHK value
-	* Syntax:
-	*     value := JSON.parse( text [, reviver ] )
-	* Parameter(s):
-	*     value      [retval] - parsed value
-	*     text    [in, ByRef] - JSON formatted string
-	*     reviver   [in, opt] - function object, similar to JavaScript's
-	*                           JSON.parse() 'reviver' parameter
-	*/
-
 	class parse extends JSON.Functor
 	{
 		call(self, ByRef param_string, param_reviver:="")
@@ -192,19 +180,6 @@ class JSON
 	}
 
 
-	/**
-	* Method: stringify
-	*     Converts an AHK value into a JSON string
-	* Syntax:
-	*     str := JSON.stringify( value [, replacer, space ] )
-	* Parameter(s):
-	*     str        [retval] - JSON representation of an AHK value
-	*     value          [in] - any value(object, string, number)
-	*     replacer  [in, opt] - function object, similar to JavaScript's
-	*                           JSON.stringify() 'replacer' parameter
-	*     space     [in, opt] - similar to JavaScript's JSON.stringify()
-	*                           'space' parameter
-	*/
 	class stringify extends JSON.Functor
 	{
 		call(self, param_value, param_replacer:="", space:="")
@@ -336,21 +311,14 @@ class JSON
 	}
 
 
-	/**
-	* Property: Undefined
-	*     Proxy for 'undefined' type
-	* Syntax:
-	*     undefined := JSON.Undefined
-	* Remarks:
-	*     For use with reviver and replacer functions since AutoHotkey does not
-	*     have an 'undefined' type. Returning blank("") or 0 won't work since these
-	*     can't be distnguished from actual JSON values. This leaves us with objects.
-	*     Replacer() - the caller may return a non-serializable AHK objects such as
-	*     ComObject, Func, BoundFunc, FileObject, RegExMatchObject, and Property to
-	*     mimic the behavior of returning 'undefined' in JavaScript but for the sake
-	*     of code readability and convenience, it's better to do 'return JSON.Undefined'.
-	*     Internally, the property returns a ComObject with the variant type of VT_EMPTY.
-	*/
+	; For use with reviver and replacer functions since AutoHotkey does not
+	; have an 'undefined' type. Returning blank("") or 0 won't work since these
+	; can't be distnguished from actual JSON values. This leaves us with objects.
+	; Replacer() - the caller may return a non-serializable AHK objects such as
+	; ComObject, Func, BoundFunc, FileObject, RegExMatchObject, and Property to
+	; mimic the behavior of returning 'undefined' in JavaScript but for the sake
+	; of code readability and convenience, it's better to do 'return JSON.Undefined'.
+	; Internally, the property returns a ComObject with the variant type of VT_EMPTY.
 	Undefined[]
 	{
 		get {
