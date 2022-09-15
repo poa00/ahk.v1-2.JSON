@@ -22,10 +22,10 @@ class JSON
 			; of alphabetically. Skip if no reviver function is specified.
 			this.keys := this.rev ? {} : false
 
-			static quot := chr(34), bashq := "\" . quot
-				, json_value := quot . "{[01234567890-tfn"
-				, json_value_or_array_closing := quot . "{[]01234567890-tfn"
-				, object_key_or_object_closing := quot . "}"
+			static quot := chr(34), bashq := "\" quot
+				, json_value := quot "{[01234567890-tfn"
+				, json_value_or_array_closing := quot "{[]01234567890-tfn"
+				, object_key_or_object_closing := quot "}"
 
 			key := ""
 			is_key := false
@@ -105,9 +105,9 @@ class JSON
 									this.parseError("\", param_string, pos - strLen(subStr(value, i+1)))
 								}
 
-								uffff := Abs("0x" . subStr(value, i+2, 4))
+								uffff := Abs("0x" subStr(value, i+2, 4))
 								if (A_IsUnicode || uffff < 0x100) {
-									value := subStr(value, 1, i-1) . chr(uffff) . subStr(value, i+6)
+									value := subStr(value, 1, i-1) chr(uffff) subStr(value, i+6)
 								}
 							}
 
@@ -152,7 +152,7 @@ class JSON
 
 		parseError(param_expect, ByRef param_string, pos, param_length:=1)
 		{
-			static quot := chr(34), qurly := quot . "}"
+			static quot := chr(34), qurly := quot "}"
 
 			line := strSplit(subStr(param_string, 1, pos), "`n", "`r").length()
 			col := pos - inStr(param_string, "`n",, -(strLen(param_string)-pos+1))
@@ -262,7 +262,7 @@ class JSON
 								str .= this.indent
 							}
 							v := this.str(param_value, A_Index)
-							str .= (v != "") ? v . "," : "null,"
+							str .= (v != "") ? v "," : "null,"
 						}
 					} else {
 						colon := this.gap ? ": " : ":"
@@ -272,7 +272,7 @@ class JSON
 								if (this.gap) {
 									str .= this.indent
 								}
-								str .= this.quote(k) . colon . v . ","
+								str .= this.quote(k) colon v ","
 							}
 						}
 					}
@@ -287,7 +287,7 @@ class JSON
 					if (this.gap) {
 						this.indent := stepback
 					}
-					return is_array ? "[" . str . "]" : "{" . str . "}"
+					return is_array ? "[" str "]" : "{" str "}"
 				}
 			} else {
 				; is_number ? param_value : "param_value"
@@ -297,7 +297,7 @@ class JSON
 
 		quote(param_string)
 		{
-			static quot := chr(34), bashq := "\" . quot
+			static quot := chr(34), bashq := "\" quot
 
 			if (param_string != "") {
 				param_string := strReplace(param_string,  "\", "\\")
@@ -314,7 +314,7 @@ class JSON
 					param_string := strReplace(param_string, m.Value, format("\u{1:04x}", ord(m.Value)))
 				}
 			}
-			return quot . param_string . quot
+			return quot param_string quot
 		}
 	}
 
